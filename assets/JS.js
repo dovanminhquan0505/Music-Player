@@ -1,7 +1,7 @@
 /**
  * 1. Render songs              => Done
  * Scroll top                   => Done
- * Play / pause / seek
+ * Play / pause / seek          => Done
  * CD rotate
  * Next / prev
  * Random
@@ -19,6 +19,7 @@ const heading = $('header h2');
 const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
 const playButton = $('.btn-toggle-play');
+const progress = $('.progress');
 
 const app = {
     currentIndex: 0,
@@ -107,14 +108,36 @@ const app = {
         //Xử lý khi click vào play/pause
         playButton.onclick = function(){
             if(_this.isPlaying){
-                _this.isPlaying = false;
                 audio.pause();
-                player.classList.remove('playing');
             }else {
-                _this.isPlaying = true;
                 audio.play();
-                player.classList.add('playing');
             }
+        }
+
+        //khi bài hát được play
+        audio.onplay = function(){
+            _this.isPlaying = true;
+            player.classList.add('playing');
+        }
+
+        //khi bài hát bị pause
+        audio.onpause = function(){
+            _this.isPlaying = false;
+            player.classList.remove('playing');
+        }
+
+        //Khi tiến độ bài hát thay đổi
+        audio.ontimeupdate = function(){
+            if(audio.duration){
+                const progressPercent = Math.floor(audio.currentTime / audio.duration * 100);
+                progress.value = progressPercent;
+            }
+        }
+
+        //Xử lý khi tua nhạc 
+        progress.onchange = function(e){
+            const seekTime = audio.duration / 100 * e.target.value;
+            audio.currentTime = seekTime;
         }
     },
     loadCurrentSong: function(){
