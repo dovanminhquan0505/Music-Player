@@ -8,7 +8,8 @@
  * Next / Repeat when ended     => Done
  * Active song                  => Done
  * Scroll active song into view => Done
- * Play song when click **/
+ * Play song when click         => Done
+ * **/
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
@@ -24,6 +25,7 @@ const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
+const playList = $('.playlist');
 
 const app = {
     currentIndex: 0,
@@ -76,7 +78,7 @@ const app = {
     ],
     render:function(){
         const htmls = this.songs.map((song, index) => {
-            return `<div class="song ${index === this.currentIndex ? 'active': ''}"> 
+            return `<div class="song ${index === this.currentIndex ? 'active': ''}" data-index = ${index}> 
                         <div class="thumb"
                             style="background-image: url('${song.image}')">
                         </div>
@@ -89,7 +91,7 @@ const app = {
                         </div>
                     </div>`
         })
-        $('.playlist').innerHTML = htmls.join('');
+        playList.innerHTML = htmls.join('');
     },
     defineProperties: function(){ //Lấy ra danh sách nhạc đầu tiên
         Object.defineProperty(this, 'currentSong', {
@@ -201,14 +203,39 @@ const app = {
                 nextBtn.click();
             }
         }
+
+        //Lắng nghe hành vi Click vào playlist
+        playList.onclick = function(e){
+            if(e.target.closest('.song:not(.active)') && !e.target.closest('.option')){
+                //Xử lý khi click vào song
+                if(e.target.closest('.song:not(.active)')){
+                    const songElement = e.target.closest('.song');
+                    const songIndex = Number(songElement.dataset.index);
+                    _this.currentIndex = songIndex;
+                    _this.loadCurrentSong();
+                    audio.play();
+                    _this.render();
+                    _this.scrollToActiveSong();
+                }
+            }
+        }
     },
     scrollToActiveSong: function(){
-        setTimeout(() => {
-            $('.song.active').scrollIntoView({
-                behavior:'smooth',
-                block:'nearest'
-            });
-        }, 300)
+        if(app.currentIndex <= 3 && app.currentIndex < this.songs.length){
+            setTimeout(() => {
+                $('.song.active').scrollIntoView({
+                    behavior:'smooth',
+                    block:'center'
+                });
+            }, 300)
+        } else {
+            setTimeout(() => {
+                $('.song.active').scrollIntoView({
+                    behavior:'smooth',
+                    block:'nearest'
+                });
+            }, 300)
+        }
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;

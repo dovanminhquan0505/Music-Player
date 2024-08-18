@@ -148,6 +148,10 @@
   .song.active {
     background-color: var(--primary-color);
   }
+
+  .song:hover{
+    opacity: 0.8;
+  }
   
   .song:active {
     opacity: 0.8;
