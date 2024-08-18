@@ -23,11 +23,13 @@ const progress = $('.progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
+const repeatBtn = $('.btn-repeat');
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
+    isRepeat: false,
     songs: [
         {
             name: 'Những kẻ mộng mơ',
@@ -181,9 +183,19 @@ const app = {
             randomBtn.classList.toggle('active', _this.isRandom); // nếu israndom đúng thì add active, ko đúng thì remove active    
         }   
 
+        //Xử lý khi repeat song khi audio ended
+        repeatBtn.onclick = function(){
+            _this.isRepeat = !_this.isRepeat;
+            repeatBtn.classList.toggle('active', _this.isRepeat); // nếu isRepeat đúng thì add active, ko đúng thì remove active
+        }
+
         //Xử lý next song khi audio ended
         audio.onended = function(){
-            nextBtn.click();
+            if(_this.isRepeat){
+                audio.play();
+            }else{
+                nextBtn.click();
+            }
         }
     },
     loadCurrentSong: function(){
