@@ -3,7 +3,7 @@
  * Scroll top                   => Done
  * Play / pause / seek          => Done
  * CD rotate                    => Done
- * Next / prev
+ * Next / prev                  => Done 
  * Random
  * Next / Repeat when ended
  * Active song
@@ -157,6 +157,11 @@ const app = {
             _this.nextSongs();
             audio.play();
         }
+
+        prevBtn.onclick = function(){
+            _this.prevSongs();
+            audio.play();
+        }
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;
@@ -167,6 +172,13 @@ const app = {
         this.currentIndex++;
         if(this.currentIndex >= this.songs.length){
             this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
+    },
+    prevSongs: function(){
+        this.currentIndex--;
+        if(this.currentIndex < 0){
+            this.currentIndex = this.songs.length - 1;
         }
         this.loadCurrentSong();
     },
