@@ -20,7 +20,8 @@ const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
 const playButton = $('.btn-toggle-play');
 const progress = $('.progress');
-
+const nextBtn = $('.btn-next');
+const prevBtn = $('.btn-prev');
 const app = {
     currentIndex: 0,
     isPlaying: false,
@@ -150,11 +151,24 @@ const app = {
             const seekTime = audio.duration / 100 * e.target.value;
             audio.currentTime = seekTime;
         }
+
+        //Khi next bài hát mới
+        nextBtn.onclick = function(){
+            _this.nextSongs();
+            audio.play();
+        }
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
         audio.src = this.currentSong.path;
+    },
+    nextSongs: function(){
+        this.currentIndex++;
+        if(this.currentIndex >= this.songs.length){
+            this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
     },
     start: function(){
         //Định nghĩa các thuộc tính cho Object
