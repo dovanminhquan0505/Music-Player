@@ -4,7 +4,7 @@
  * Play / pause / seek          => Done
  * CD rotate                    => Done
  * Next / prev                  => Done 
- * Random
+ * Random                       => Done
  * Next / Repeat when ended
  * Active song
  * Scroll active song into view
@@ -22,9 +22,12 @@ const playButton = $('.btn-toggle-play');
 const progress = $('.progress');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
+const randomBtn = $('.btn-random');
+
 const app = {
     currentIndex: 0,
     isPlaying: false,
+    isRandom: false,
     songs: [
         {
             name: 'Những kẻ mộng mơ',
@@ -154,14 +157,29 @@ const app = {
 
         //Khi next bài hát mới
         nextBtn.onclick = function(){
-            _this.nextSongs();
+            if(_this.isRandom){
+                _this.randomSong(); 
+            }else{
+                _this.nextSongs();
+            }
             audio.play();
         }
 
+        //Khi prev bài hát mới
         prevBtn.onclick = function(){
-            _this.prevSongs();
+            if(_this.isRandom){
+                _this.randomSong(); 
+            }else{
+                _this.prevSongs();
+            }
             audio.play();
         }
+
+        //Xử lý khi click vào random bài hát
+        randomBtn.onclick = function(){
+            _this.isRandom = !_this.isRandom;
+            randomBtn.classList.toggle('active', _this.isRandom); // nếu israndom đúng thì add active, ko đúng thì remove active    
+        }   
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;
@@ -180,6 +198,11 @@ const app = {
         if(this.currentIndex < 0){
             this.currentIndex = this.songs.length - 1;
         }
+        this.loadCurrentSong();
+    },
+    randomSong: function(){
+        const newIndex = Math.floor(Math.random() * this.songs.length);
+        this.currentIndex = newIndex;
         this.loadCurrentSong();
     },
     start: function(){
