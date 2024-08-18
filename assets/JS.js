@@ -2,7 +2,7 @@
  * 1. Render songs              => Done
  * Scroll top                   => Done
  * Play / pause / seek          => Done
- * CD rotate
+ * CD rotate                    => Done
  * Next / prev
  * Random
  * Next / Repeat when ended
@@ -96,6 +96,15 @@ const app = {
         const _this = this;
         const cdWidth = cd.offsetWidth;
 
+        //Xử lý CD quay / dừng
+        const cdThumbAnimate = cdThumb.animate([
+            { transform: 'rotate(360deg)'}
+        ], {
+            duration: 10000, //10 seconds
+            iterations: Infinity // vô hạn
+        })
+        cdThumbAnimate.pause();
+
         //Xử lý phóng to / thu nhỏ CD
         document.onscroll = function(){
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -118,12 +127,14 @@ const app = {
         audio.onplay = function(){
             _this.isPlaying = true;
             player.classList.add('playing');
+            cdThumbAnimate.play();
         }
 
         //khi bài hát bị pause
         audio.onpause = function(){
             _this.isPlaying = false;
             player.classList.remove('playing');
+            cdThumbAnimate.pause();
         }
 
         //Khi tiến độ bài hát thay đổi
