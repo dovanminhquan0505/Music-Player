@@ -7,7 +7,7 @@
  * Random                       => Done
  * Next / Repeat when ended     => Done
  * Active song                  => Done
- * Scroll active song into view
+ * Scroll active song into view => Done
  * Play song when click **/
 
 const $ = document.querySelector.bind(document);
@@ -166,6 +166,7 @@ const app = {
             }
             audio.play();
             _this.render();
+            _this.scrollToActiveSong();
         }
 
         //Khi prev bài hát mới
@@ -176,6 +177,8 @@ const app = {
                 _this.prevSongs();
             }
             audio.play();
+            _this.render();
+            _this.scrollToActiveSong();
         }
 
         //Xử lý khi click vào random bài hát
@@ -198,6 +201,14 @@ const app = {
                 nextBtn.click();
             }
         }
+    },
+    scrollToActiveSong: function(){
+        setTimeout(() => {
+            $('.song.active').scrollIntoView({
+                behavior:'smooth',
+                block:'nearest'
+            });
+        }, 300)
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;
