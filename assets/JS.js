@@ -6,7 +6,7 @@
  * Next / prev                  => Done 
  * Random                       => Done
  * Next / Repeat when ended     => Done
- * Active song
+ * Active song                  => Done
  * Scroll active song into view
  * Play song when click **/
 
@@ -76,7 +76,7 @@ const app = {
     ],
     render:function(){
         const htmls = this.songs.map((song, index) => {
-            return `<div class="song"> 
+            return `<div class="song ${index === this.currentIndex ? 'active': ''}"> 
                         <div class="thumb"
                             style="background-image: url('${song.image}')">
                         </div>
@@ -165,6 +165,7 @@ const app = {
                 _this.nextSongs();
             }
             audio.play();
+            _this.render();
         }
 
         //Khi prev bài hát mới
