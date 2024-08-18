@@ -5,7 +5,7 @@
  * CD rotate                    => Done
  * Next / prev                  => Done 
  * Random                       => Done
- * Next / Repeat when ended
+ * Next / Repeat when ended     => Done
  * Active song
  * Scroll active song into view
  * Play song when click **/
@@ -180,6 +180,11 @@ const app = {
             _this.isRandom = !_this.isRandom;
             randomBtn.classList.toggle('active', _this.isRandom); // nếu israndom đúng thì add active, ko đúng thì remove active    
         }   
+
+        //Xử lý next song khi audio ended
+        audio.onended = function(){
+            nextBtn.click();
+        }
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name;
